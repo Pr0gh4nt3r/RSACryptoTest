@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="OpenAIRandomPrime">
+      <HintPath>..\..\..\..\Libraries\OpenAIRandomPrime.dll</HintPath>
+    </Reference>
+    <Reference Include="RandomPrime">
+      <HintPath>..\..\..\..\Libraries\RandomPrime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

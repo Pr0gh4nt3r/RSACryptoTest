@@ -38,7 +38,7 @@ namespace RSACryptoTest
             byte[] aesKey = SymmetricEncryption.GenerateAESKey();
             byte[] encryptedAESKey = RSACryptoServiceProvider.Encrypt(aesKey, para);
             Console.ForegroundColor = white;
-            Console.WriteLine("Ihr privater Schlüssel lautet:");
+            Console.WriteLine("\n\nIhr privater Schlüssel lautet:");
             Console.ForegroundColor = red;
             Console.WriteLine(para.PrivateKey != null ? BitConverter.ToString(para.PrivateKey) : BitConverter.ToString(para.EncryptedPrivateKey));
             Console.ForegroundColor = white;
@@ -46,7 +46,7 @@ namespace RSACryptoTest
             Console.ForegroundColor = green;
             Console.WriteLine(BitConverter.ToString(para.PublicKey));
             Console.ForegroundColor = blue;
-            Console.Write("Gib deinen zu verschlüsselnden Text ein: ");
+            Console.Write("\nGib deinen zu verschlüsselnden Text ein: ");
             Console.ForegroundColor = white;
             string originalMessage = Console.ReadLine();
             byte[] encryptedMassage = SymmetricEncryption.Encrypt(originalMessage, aesKey);
@@ -62,7 +62,6 @@ namespace RSACryptoTest
             Console.Write("Der entschlüsselte Text: ");
             Console.ForegroundColor = white;
             Console.WriteLine(decryptedMessage);
-            Console.ReadLine();
         }
     }
 }

@@ -23,6 +23,8 @@ namespace RSACryptoTest
                 if (string.IsNullOrEmpty(input))
                     break;
                 _ = int.TryParse(input, out keySize);
+                if (keySize > 0)
+                    parsed = true;
             }
             while (!parsed);
             Console.ForegroundColor = yellow;

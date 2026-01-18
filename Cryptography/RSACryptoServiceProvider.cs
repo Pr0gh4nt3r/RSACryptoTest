@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Threading.Tasks;
 
 namespace Cryptography
 {
@@ -68,8 +69,14 @@ namespace Cryptography
 
         private RSAParameters CreateKeyPair()
         {
-            BigInteger p = OpenAIRandomPrime.RandomPrime.GeneratePrime(_keySize / 2);
-            BigInteger q = OpenAIRandomPrime.RandomPrime.GeneratePrime(_keySize / 2);
+            // Parallelisiere die Primzahlgenerierung auf mehreren CPU-Kernen
+            var taskP = Task.Run(() => OpenAIRandomPrime.RandomPrime.GeneratePrime(_keySize / 2));
+            var taskQ = Task.Run(() => OpenAIRandomPrime.RandomPrime.GeneratePrime(_keySize / 2));
+            
+            Task.WaitAll(taskP, taskQ);
+            
+            BigInteger p = taskP.Result;
+            BigInteger q = taskQ.Result;
             BigInteger N = p * q;
             BigInteger phi = (p - 1) * (q - 1);
             BigInteger e = 65537;

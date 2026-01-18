@@ -18,7 +18,7 @@ namespace RSACryptoTest
             bool parsed = false;
             do
             {
-                Console.Write("Geben Sie die gewünschte Schlüssellänge an (leer = Standard 2048 Bit): ");
+                Console.Write("Geben Sie die gewünschte Schlüssellänge an (leer = Standard 4096 Bit): ");
                 string input = Console.ReadLine();
                 if (string.IsNullOrEmpty(input))
                     break;

@@ -11,7 +11,7 @@ namespace Cryptography
 
         public RSACryptoServiceProvider()
         {
-            _keySize = 2048;
+            _keySize = 4096;
             _parameters = CreateKeyPair();
         }
 

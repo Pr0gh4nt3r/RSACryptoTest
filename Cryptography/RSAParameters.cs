@@ -40,27 +40,15 @@ namespace Cryptography
         }
     }
 
-    public class PublicKey
+    public class PublicKey(BigInteger N, BigInteger e)
     {
-        public readonly BigInteger N;
-        public readonly BigInteger e;
-
-        public PublicKey(BigInteger N, BigInteger e)
-        {
-            this.N = N;
-            this.e = e;
-        }
+        public readonly BigInteger N = N;
+        public readonly BigInteger e = e;
     }
 
-    public class PrivateKey
+    public class PrivateKey(BigInteger N, BigInteger d)
     {
-        public readonly BigInteger N;
-        public readonly BigInteger d;
-
-        public PrivateKey(BigInteger N, BigInteger d)
-        {
-            this.N = N;
-            this.d = d;
-        }
+        public readonly BigInteger N = N;
+        public readonly BigInteger d = d;
     }
 }

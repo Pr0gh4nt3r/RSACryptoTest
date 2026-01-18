@@ -14,11 +14,11 @@ namespace Cryptography
             aes.Key = GenerateKeyFromPassword(password, aes.KeySize / 8);
             aes.GenerateIV();
 
-            using var encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
-            using var ms = new MemoryStream();
+            using ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+            using MemoryStream ms = new();
             ms.Write(aes.IV, 0, aes.IV.Length);
-            using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
-            using (var bw = new BinaryWriter(cs))
+            using (CryptoStream cs = new(ms, encryptor, CryptoStreamMode.Write))
+            using (BinaryWriter bw = new(cs))
             {
                 // Schreibe N und d in den Stream
                 Helpers.WriteBigInteger(bw, privateKey.N);
@@ -33,14 +33,14 @@ namespace Cryptography
             using Aes aes = Aes.Create();
             aes.Key = GenerateKeyFromPassword(password, aes.KeySize / 8);
 
-            using var ms = new MemoryStream(encryptedPrivateKey);
+            using MemoryStream ms = new(encryptedPrivateKey);
             byte[] iv = new byte[aes.IV.Length];
             ms.Read(iv, 0, iv.Length);
             aes.IV = iv;
 
             using var decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
-            using var cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read);
-            using var br = new BinaryReader(cs);
+            using CryptoStream cs = new(ms, decryptor, CryptoStreamMode.Read);
+            using BinaryReader br = new(cs);
             // Lies N und d aus dem Stream
             BigInteger n = Helpers.ReadBigInteger(br);
             BigInteger d = Helpers.ReadBigInteger(br);
@@ -91,7 +91,7 @@ namespace Cryptography
         public static string Decrypt(byte[] cipherText, byte[] key)
         {
             using Aes aesAlg = Aes.Create();
-            using MemoryStream msDecrypt = new MemoryStream(cipherText);
+            using MemoryStream msDecrypt = new(cipherText);
             byte[] iv = new byte[16]; // AES-Blockgröße für IV
             msDecrypt.Read(iv, 0, iv.Length); // IV aus dem verschlüsselten Text extrahieren
 

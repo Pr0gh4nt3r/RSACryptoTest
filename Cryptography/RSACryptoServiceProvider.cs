@@ -45,10 +45,12 @@ namespace Cryptography
 
         public static byte[] Encrypt(byte[] data, RSAParameters rsaKeyInfo)
         {
-            var publicKey = Helpers.GetKeyFromByteArray(rsaKeyInfo.PublicKey);
+            // getting public key
+            (BigInteger N, BigInteger de) = Helpers.GetKeyFromByteArray(rsaKeyInfo.PublicKey);
 
             BigInteger m = new(data);
-            BigInteger c = BigInteger.ModPow(m, publicKey.de, publicKey.N);
+            BigInteger c = BigInteger.ModPow(m, de, N);
+
             return c.ToByteArray();
         }
 
@@ -60,18 +62,20 @@ namespace Cryptography
                 rsaKeyInfo.DecryptPrivateKey(password);
             }
 
-            var privateKey = Helpers.GetKeyFromByteArray(rsaKeyInfo.PrivateKey);
+            // getting private key
+            (BigInteger N, BigInteger de) = Helpers.GetKeyFromByteArray(rsaKeyInfo.PrivateKey);
 
             BigInteger c = new(data);
-            BigInteger m = BigInteger.ModPow(c, privateKey.de, privateKey.N);
+            BigInteger m = BigInteger.ModPow(c, de, N);
+
             return m.ToByteArray();
         }
 
         private RSAParameters CreateKeyPair()
         {
             // Parallelisiere die Primzahlgenerierung auf mehreren CPU-Kernen
-            var taskP = Task.Run(() => OpenAIRandomPrime.RandomPrime.GeneratePrime(_keySize / 2));
-            var taskQ = Task.Run(() => OpenAIRandomPrime.RandomPrime.GeneratePrime(_keySize / 2));
+            Task<BigInteger> taskP = Task.Run(() => OpenAIRandomPrime.RandomPrime.GeneratePrime(_keySize / 2));
+            Task<BigInteger> taskQ = Task.Run(() => OpenAIRandomPrime.RandomPrime.GeneratePrime(_keySize / 2));
             
             Task.WaitAll(taskP, taskQ);
             
@@ -83,6 +87,7 @@ namespace Cryptography
             BigInteger d = GetPK(e, phi);
             PublicKey pk = new(N, e);
             PrivateKey sk = new(N, d);
+
             return new RSAParameters(sk, pk);
         }
 

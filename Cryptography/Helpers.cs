@@ -8,8 +8,8 @@ namespace Cryptography
     {
         internal static byte[] ConvertKeyToByteArray(BigInteger N, BigInteger de)
         {
-            using var ms = new MemoryStream();
-            using (var bw = new BinaryWriter(ms))
+            using MemoryStream ms = new();
+            using (BinaryWriter bw = new(ms))
             {
                 // Schreibe N und d/e in den Stream
                 WriteBigInteger(bw, N);
@@ -21,11 +21,12 @@ namespace Cryptography
 
         internal static (BigInteger N, BigInteger de) GetKeyFromByteArray(byte[] key)
         {
-            using var ms = new MemoryStream(key);
-            using var br = new BinaryReader(ms);
+            using MemoryStream ms = new(key);
+            using BinaryReader br = new(ms);
             // Lies N und d/e aus dem Stream
             BigInteger N = ReadBigInteger(br);
             BigInteger de = ReadBigInteger(br);
+
             return (N, de);
         }
 
@@ -40,6 +41,7 @@ namespace Cryptography
         {
             int length = reader.ReadInt32();  // Lies die Länge des BigInteger-Arrays
             byte[] data = reader.ReadBytes(length);
+
             return new BigInteger(data, isUnsigned: true, isBigEndian: true);
         }
 
